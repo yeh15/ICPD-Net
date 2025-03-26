@@ -17,5 +17,5 @@ https://huggingface.co/chendelong/RemoteCLIP/tree/main
   https://github.com/caoql98/SDM
 - ​**DLRSD-5i**:  
   https://sites.google.com/view/zhouwx/dataset#h.p_hQS2jYeaFpV0
-- **Softmax-GradCAM** of iSAID-5i for comparison:
+### **Softmax-GradCAM** of iSAID-5i for comparison
   https://pan.baidu.com/s/1hXirGlwoAm77DkV_ZpyWPw?pwd=rgig
