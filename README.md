@@ -19,3 +19,6 @@ https://huggingface.co/chendelong/RemoteCLIP/tree/main
   https://sites.google.com/view/zhouwx/dataset#h.p_hQS2jYeaFpV0
 ### **Softmax-GradCAM** of iSAID-5i for comparison
   https://pan.baidu.com/s/1hXirGlwoAm77DkV_ZpyWPw?pwd=rgig
+
+## Acknowledgement
+This repo benefits from [PCFNet](https://github.com/TinyAway/PCFNet), [RemoteCLIP](https://github.com/ChenDelong1999/RemoteCLIP), and [CLIP](https://github.com/openai/CLIP). Thanks for their works.
