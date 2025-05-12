@@ -20,7 +20,7 @@ https://huggingface.co/chendelong/RemoteCLIP/tree/main
 ### **Softmax-GradCAM** of iSAID-5i for comparison
   https://pan.baidu.com/s/1hXirGlwoAm77DkV_ZpyWPw?pwd=rgig
 ## Model Weights for iSAID-5i and DLRSD-5i  
-Below are the weights for 1-shot and 5-shot experiments on the iSAID-5i and DLRSD-5i datasets. All files are hosted via Baidu Netdisk (requires a Chinese IP or account to access).
+Below are the weights for 1-shot and 5-shot experiments on the iSAID-5i and DLRSD-5i datasets. All files are hosted via Baidu Netdisk.
 
 ---
 
@@ -28,7 +28,7 @@ Below are the weights for 1-shot and 5-shot experiments on the iSAID-5i and DLRS
 #### 1-Shot iSAID-5i  
 | Fold | File Name                    | Baidu Netdisk Link                                                                 |
 |------|------------------------------|------------------------------------------------------------------------------------|
-| 0    | `1_shot_0_fold_ISAID.pt`     | [Download](https://pan.baidu.com/s/1ToERONYuVy6syKCUYX_ukQ?pwd=qgy8) (Extract: qgy8) |
+| 0    | `1_shot_0_fold_ISAID.pt`     | [Download](https://pan.baidu.com/s/1ToERONYuVy6syKCUYX_ukQ?pwd=qgy8). (Extract: qgy8) |
 | 1    | `1_shot_1_fold_ISAID.pt`     | [Download](https://pan.baidu.com/s/1gOo_Hr1vP7MTS6hdFMfcdg?pwd=gth9) (Extract: gth9) |
 | 2    | `1_shot_2_fold_ISAID.pt`     | [Download](https://pan.baidu.com/s/1TK4feEi6NaunlE6P1bFYZQ?pwd=r8jj) (Extract: r8jj) |
 
