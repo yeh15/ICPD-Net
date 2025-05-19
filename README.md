@@ -1,7 +1,7 @@
 # ICPD-Net
 
 Source code for ICPD-Net, a method that leverages Vision-Language Models (VLMs) to extract cross-modal priors for mitigating intra-class variance issues in remote sensing, thereby enhancing Few-Shot Segmentation (FSS) in remote sensing applications.
-![the overview](./overview.pdf)
+![the overview](./overview.png)
 ## Requirements
 - Python 3.9
 - PyTorch 2.1
