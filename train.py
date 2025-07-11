@@ -5,8 +5,8 @@ import argparse
 import torch.optim as optim
 import torch
 from evaluation import Evaluator
-from ICPD_Res import IDPD_Net
-#from IVLPD_vgg import IDPD_Net
+from ICPD_Res import ICPD_Net
+#from IVLPD_vgg import ICPD_Net
 
 
 def train(epoch, model, dataloader, optimizer, training, device):
@@ -66,7 +66,7 @@ if __name__ == '__main__':
     args = parser.parse_args(args=[])
     Logger.initialize(args, training=True)
 
-    model = IDPD_Net(args.backbone, shot=args.shot, use_original_imgsize=False)
+    model = ICPD_Net(args.backbone, shot=args.shot, use_original_imgsize=False)
     # model = HypercorrSqueezeNetwork(args.backbone, False)
     # model = DCAMA(args.backbone, False)
     Logger.log_params(model)
