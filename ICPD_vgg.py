@@ -106,9 +106,9 @@ class PriorLearner(nn.Module):
         output = output.permute(0, 2, 3, 1)
         return output
 
-class IDPD_Net(nn.Module):
+class ICPD_Net(nn.Module):
     def __init__(self, backbone, shot, use_original_imgsize):
-        super(IDPD_Net, self).__init__()
+        super(ICPD_Net, self).__init__()
 
         # 1. Backbone network initialization
         self.backbone_type = backbone
@@ -335,6 +335,6 @@ if __name__ == "__main__":
         'org_query_imsize': (256, 256),
         'semantic_embeddings': torch.rand(4,15,768)
     }
-    model = IDPD_Net('vgg16', 5, False)
+    model = ICPD_Net('vgg16', 5, False)
     out,_ = model(batch['query_img'], batch['support_imgs'], batch['support_masks'], batch['semantic_embeddings'])
     print(out.size())
