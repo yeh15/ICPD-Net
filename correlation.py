@@ -125,7 +125,95 @@ def ndcg_corr(query_feat, support_feat, mask):
     with torch.no_grad():
         similarity = ndcg_torch(support_feat, query_feat, mask).view(bsz, ha, wa)
     return similarity
+def calculate_mrr(relevance_scores):
+    """
+    计算每个查询特征的 MRR。
+    relevance_scores: shape (nA, k) 表示每个查询的前 k 个匹配是否有效 (1 表示有效)
+    """
+    first_pos = torch.argmax(relevance_scores, dim=1)  # 第一个有效匹配的位置
+    has_positive = (relevance_scores.sum(dim=1) > 0)   # 是否有有效匹配
+    ranks = torch.where(has_positive, first_pos + 1, torch.tensor(float('inf'), device=relevance_scores.device))
+    mrr_values = 1.0 / ranks
+    mrr_values = torch.where(has_positive, mrr_values, torch.zeros_like(mrr_values))
+    return mrr_values
 
+def mrr_torch(feature_B, feature_A, mask):
+    b, ch, nA = feature_A.shape
+    nB = feature_B.shape[-1]
+    feature_A = feature_A.view(b, ch, -1).permute(0, 2, 1).contiguous()  # shape: (b, nA, ch)
+    feature_B = feature_B.view(b, ch, -1).permute(0, 2, 1).contiguous()  # shape: (b, nB, ch)
+
+    mrrs = []
+    for i in range(b):
+        dist_squared = torch.cdist(feature_A[i], feature_B[i], p=2).pow(2)  # shape: (nA, nB)
+        
+        mask_bool = mask[i] > 0
+        k = mask_bool.sum().item()
+        
+        if k == 0:
+            mrr_values = torch.zeros((nA,), dtype=torch.float32, device=feature_A.device)
+        else:
+            values, indices = torch.topk(-dist_squared, k=k, dim=1, largest=True, sorted=True)
+            mask_relevance = mask_bool[indices].float()  # shape: (nA, k)
+            mrr_values = calculate_mrr(mask_relevance)
+        mrrs.append(mrr_values.unsqueeze(0))  # shape: (1, nA)
+    
+    mrrs = torch.cat(mrrs, dim=0)  # shape: (b, nA)
+    return mrrs
+
+def mrr_corr(query_feat, support_feat, mask):
+    bsz, ch, ha, wa = query_feat.size()
+    query_feat = query_feat.view(bsz, ch, -1)
+    support_feat = support_feat.view(bsz, ch, -1)
+    mask = mask.view(bsz, -1)
+
+    with torch.no_grad():
+        similarity = mrr_torch(support_feat, query_feat, mask).view(bsz, ha, wa)
+    return similarity
+
+def calculate_hr(relevance_scores, k):
+    """
+    计算每个查询特征的 HR（命中率）。
+    relevance_scores: shape (nA, k) 表示每个查询的前 k 个匹配是否有效 (1 表示有效)
+    """
+    if k == 0:
+        return torch.zeros((relevance_scores.shape[0],), dtype=torch.float32, device=relevance_scores.device)
+    hit_rates = relevance_scores.float().sum(dim=1) / k
+    return hit_rates
+
+def hr_torch(feature_B, feature_A, mask):
+    b, ch, nA = feature_A.shape
+    nB = feature_B.shape[-1]
+    feature_A = feature_A.view(b, ch, -1).permute(0, 2, 1).contiguous()  # shape: (b, nA, ch)
+    feature_B = feature_B.view(b, ch, -1).permute(0, 2, 1).contiguous()  # shape: (b, nB, ch)
+
+    hrs = []
+    for i in range(b):
+        dist_squared = torch.cdist(feature_A[i], feature_B[i], p=2).pow(2)  # shape: (nA, nB)
+        
+        mask_bool = mask[i] > 0
+        k = mask_bool.sum().item()
+        
+        if k == 0:
+            hr_values = torch.zeros((nA,), dtype=torch.float32, device=feature_A.device)
+        else:
+            values, indices = torch.topk(-dist_squared, k=k, dim=1, largest=True, sorted=True)
+            mask_relevance = mask_bool[indices].float()  # shape: (nA, k)
+            hr_values = calculate_hr(mask_relevance, k)
+        hrs.append(hr_values.unsqueeze(0))  # shape: (1, nA)
+    
+    hrs = torch.cat(hrs, dim=0)  # shape: (b, nA)
+    return hrs
+
+def hr_corr(query_feat, support_feat, mask):
+    bsz, ch, ha, wa = query_feat.size()
+    query_feat = query_feat.view(bsz, ch, -1)
+    support_feat = support_feat.view(bsz, ch, -1)
+    mask = mask.view(bsz, -1)
+
+    with torch.no_grad():
+        similarity = hr_torch(support_feat, query_feat, mask).view(bsz, ha, wa)
+    return similarity
 class Correlation:
 
     @classmethod
